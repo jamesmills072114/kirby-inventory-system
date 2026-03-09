@@ -88,7 +88,7 @@
     </div>
 
     <div class="feature">
-      <h3>Demo Logging &amp; Verification</h3>
+      <h3>Demo Logging & Verification</h3>
       <p>Empower dealers to track demos and accountability:</p>
       <ul>
         <li>Log daily demos and sales together (e.g. <code>2/1</code> or <code>K-2/1</code>)</li>
@@ -99,31 +99,31 @@
     </div>
 
     <div class="feature">
-      <h3>Sales &amp; Commission Engine</h3>
+      <h3>Sales & Commission Engine</h3>
       <p>Automate your commission calculations and split rules:</p>
       <ul>
         <li>Configure commission percentages per payment type (cash, credit, debit, check, A-Loan, B-Loan, other)</li>
         <li>Multi-role commissions: dealer, closer, translator, team leader, manager, canvasser</li>
         <li>Customizable bonuses for volume, knock sales, weekly demos and team performance</li>
-        <li>Real‑time commission totals for each sale and daily summaries</li>
+        <li>Real-time commission totals for each sale and daily summaries</li>
       </ul>
     </div>
 
     <div class="feature">
-      <h3>Accessory Tracking &amp; Transfers</h3>
+      <h3>Accessory Tracking & Transfers</h3>
       <p>Extend accountability beyond units:</p>
       <ul>
         <li>Manage hoses, shampoo systems, belts, filters and bags with optional serial tracking</li>
-        <li>Set low‑stock alerts so you never run out of essentials</li>
+        <li>Set low-stock alerts so you never run out of essentials</li>
         <li>Log distributor transfers and trainee sales with separate reporting</li>
       </ul>
     </div>
 
     <div class="feature">
-      <h3>Reporting &amp; Dashboard</h3>
+      <h3>Reporting & Dashboard</h3>
       <p>See your office health at a glance:</p>
       <ul>
-        <li>Real‑time dashboard with inventory counts, sales metrics, demo activity and reconciliation alerts</li>
+        <li>Real-time dashboard with inventory counts, sales metrics, demo activity and reconciliation alerts</li>
         <li>Dealer performance panels with closing rate, knock conversion, objection patterns and commission earned</li>
         <li>Daily automatic email reports summarizing sales, revenue, demo counts, unverified demos and suspicious activity</li>
         <li>Export data to Excel for deeper analysis</li>
@@ -131,18 +131,153 @@
     </div>
 
     <div class="feature">
-      <h3>Security &amp; Roles</h3>
+      <h3>Security & Roles</h3>
       <p>Control access and maintain integrity:</p>
       <ul>
-        <li>Role‑based permissions: owner, manager, team leader, dealer</li>
-        <li>Row‑level security ensures dealers see only their own data</li>
+        <li>Role-based permissions: owner, manager, team leader, dealer</li>
+        <li>Row-level security ensures dealers see only their own data</li>
         <li>Audit logs record every action: inventory movements, commission rule changes, status updates</li>
       </ul>
     </div>
   </section>
 
+  <!-- Demo Logging Section: Allows dealers to submit daily demos and sales. -->
+  <section id="demo-entry">
+    <h2>Log Demo Activity</h2>
+    <p>Use this form to record your daily demo counts and sales. This prototype demonstrates how you could integrate your Supabase database to capture and store entries.</p>
+    <form id="demoForm" style="background:#ffffff;border-radius:8px;padding:20px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+      <div style="margin-bottom:10px;">
+        <label for="demos">Demos:&nbsp;</label>
+        <input type="number" id="demos" min="0" value="0" required>
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="sales">Sales:&nbsp;</label>
+        <input type="number" id="sales" min="0" value="0" required>
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="knock_demos">Knock Demos:&nbsp;</label>
+        <input type="number" id="knock_demos" min="0" value="0">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="knock_sales">Knock Sales:&nbsp;</label>
+        <input type="number" id="knock_sales" min="0" value="0">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="client_name">Client Name:&nbsp;</label>
+        <input type="text" id="client_name" placeholder="e.g. John Doe">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="client_address">Client Address:&nbsp;</label>
+        <input type="text" id="client_address" placeholder="123 Main St">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="client_city">Client City:&nbsp;</label>
+        <input type="text" id="client_city" placeholder="Laredo">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="client_zip">Client Zip:&nbsp;</label>
+        <input type="text" id="client_zip" placeholder="78041">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="objection">Objection:&nbsp;</label>
+        <select id="objection">
+          <option value="">--Select--</option>
+          <option value="price_too_high">Price Too High</option>
+          <option value="financing_concern">Financing Concern</option>
+          <option value="spouse_not_home">Spouse Not Home</option>
+          <option value="comparing_competitor">Comparing Competitor</option>
+          <option value="timing_issue">Timing Issue</option>
+          <option value="trust_concern">Trust Concern</option>
+          <option value="demo_didn't_impress">Demo Didn't Impress</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="objection_notes">Objection Notes:&nbsp;</label><br>
+        <textarea id="objection_notes" rows="3" style="width:100%;"></textarea>
+      </div>
+      <button type="submit" style="background:#800000;color:#fff;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;">Submit Demo</button>
+    </form>
+    <div id="demoFormStatus" style="margin-top:15px;font-weight:bold;"></div>
+  </section>
+
   <footer>
     <p>© 2026 Kirby Inventory System. Built for Kirby dealers by dealers.</p>
   </footer>
+
+  <!-- Include Supabase library from CDN. Version 1 is used here for browser compatibility. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.7/dist/umd/supabase.min.js"></script>
+
+  <!-- Demo submission script. Replace placeholder values with your Supabase project details and user identifiers. -->
+  <script type="module">
+    // TODO: Replace with your actual Supabase project URL and anon key.
+    const supabaseUrl = 'https://YOUR-PROJECT.supabase.co';
+    const supabaseAnonKey = 'YOUR-ANON-KEY';
+    const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+    // Replace with your actual office_id and dealer_user_id. These values tie the demo to your office and dealer.
+    const OFFICE_ID = 'YOUR-OFFICE-ID';
+    const DEALER_USER_ID = 'YOUR-DEALER-USER-ID';
+
+    const demoForm = document.getElementById('demoForm');
+    const statusDiv = document.getElementById('demoFormStatus');
+
+    demoForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusDiv.style.color = '#333';
+      statusDiv.textContent = 'Submitting…';
+
+      // Parse numeric fields, defaulting to 0 if empty
+      const demos = parseInt(document.getElementById('demos').value || '0', 10);
+      const sales = parseInt(document.getElementById('sales').value || '0', 10);
+      const knock_demos = parseInt(document.getElementById('knock_demos').value || '0', 10);
+      const knock_sales = parseInt(document.getElementById('knock_sales').value || '0', 10);
+
+      // Collect string fields (allowing null values)
+      const client_name = document.getElementById('client_name').value || null;
+      const client_address = document.getElementById('client_address').value || null;
+      const client_city = document.getElementById('client_city').value || null;
+      const client_zip = document.getElementById('client_zip').value || null;
+      const objection = document.getElementById('objection').value || null;
+      const objection_notes = document.getElementById('objection_notes').value || null;
+
+      try {
+        // Insert the demo log record into the Supabase table "demo_logs".
+        // The table must exist in your Supabase project schema. The date is stored in ISO format (YYYY‑MM‑DD).
+        const { data, error } = await supabase.from('demo_logs').insert([
+          {
+            office_id: OFFICE_ID,
+            dealer_user_id: DEALER_USER_ID,
+            log_date: new Date().toISOString().slice(0, 10),
+            demos,
+            sales,
+            knock_demos,
+            knock_sales,
+            client_name,
+            client_address,
+            client_city,
+            client_zip,
+            objection,
+            objection_notes,
+            verification_status: 'unverified'
+          }
+        ]);
+
+        if (error) {
+          console.error('Supabase error', error);
+          statusDiv.style.color = '#a80000';
+          statusDiv.textContent = 'Error submitting demo: ' + error.message;
+        } else {
+          statusDiv.style.color = '#006400';
+          statusDiv.textContent = 'Demo submitted successfully!';
+          demoForm.reset();
+        }
+      } catch (err) {
+        console.error('Unexpected error', err);
+        statusDiv.style.color = '#a80000';
+        statusDiv.textContent = 'Unexpected error: ' + err.message;
+      }
+    });
+  </script>
 </body>
 </html>
